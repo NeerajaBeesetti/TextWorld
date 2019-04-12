@@ -1,13 +1,16 @@
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
+        HashMap<String, Command> commands = new HashMap<>();
 
         Level g = new Level();
         g.initialize();
         Player player = createPlayer(g);
 
+        //initCommands(commands, g, player);
 
         String response, descResponse;
         Scanner s = new Scanner(System.in);
@@ -17,6 +20,10 @@ public class Main {
             System.out.println("You are in: " + player.getCurrentRoom().getName());
             System.out.print("What you do want to do? >");
             response = s.nextLine();
+
+//            Command command = lookupCommand(response);
+//            command.execute();
+//
 
             String[] resp = response.split(" ");
 
@@ -67,6 +74,23 @@ public class Main {
             }
         } while (!response.equals("quit"));
     }
+
+//    private  Command lookupCommand(String response) {
+//        String commandWord = getFirstWordIn(response);
+//        Command c = commands.get(commandWord);
+//        if (c == null) return new EmptyCommand();
+//
+//        c.init(response);
+//
+//        return c;
+//    }
+//
+//    private static void initCommands(HashMap<String, Command> commands, Level level, Player player) {
+//        commands.put("take", new TakeCommand(level));
+//        commands.put("look", new LookCommand(player));
+//        commands.put("add: ", new AddRoomCommand(player));
+//    }
+
 
 
     private static void printPlayerCommands() {

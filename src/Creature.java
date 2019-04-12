@@ -21,4 +21,25 @@ public abstract class Creature {
         currentRoom = newRoom;
     }
 
+    protected boolean moveToRoom(String name) {
+        if (currentRoom.getNeighbor(name) != null) {
+            Level.Room newRoom = currentRoom.getNeighbor(name);
+            newRoom.addCreature(this);
+            currentRoom.removeCreature(this);
+            setCurrentRoom(newRoom);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean moveToRoom(Level.Room newRoom) {
+        if (newRoom != null) {
+            newRoom.addCreature(this);
+            currentRoom.removeCreature(this);
+            setCurrentRoom(newRoom);
+            return true;
+        }
+        return false;
+    }
+
 }
