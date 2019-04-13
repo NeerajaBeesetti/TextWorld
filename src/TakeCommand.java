@@ -1,18 +1,24 @@
-public class TakeCommand implements Command{
-    Level level;
+public class TakeCommand implements Command {
+    Player player;
     String itemName;
 
-    public TakeCommand(Level level) {
-        this.level = level;
+    public TakeCommand(Player player) {
+        this.player = player;
     }
 
     public void init(String userString) {
-        this.itemName = getLastWordIn(userString);
+        this.itemName = userString.substring(6, userString.length());
     }
 
     public boolean execute() {
-        Player p = level.getPlayer();
-        boolean success = p.takeItem(itemName);
-        return success;
+        Item item = player.getCurrentRoom().containsItem(itemName);
+
+        if (item != null) {
+            player.addItem(item);
+            player.getCurrentRoom().removeItem(itemName);
+            System.out.println(itemName + " has been added to your inventory");
+            return true;
+        }
+        return false;
     }
 }

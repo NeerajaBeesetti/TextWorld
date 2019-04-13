@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class Level {
     private HashMap<String, Room> rooms;
     private ArrayList<Creature> allCreaturesInGame;
+    private Player player;
 
     public Level() {
         rooms = new HashMap<>();
@@ -13,7 +14,14 @@ public class Level {
     public void initialize() {
         addRoomsAndEdges();
         addItemsInRooms();
+        player = createPlayer();
         createCreatures();
+    }
+
+    private Player createPlayer() {
+        Player player = new Player("you", "it's you duh");
+        player.setCurrentRoom(getRoom("hall"));
+        return player;
     }
 
     private void addRoomsAndEdges() {
@@ -43,11 +51,15 @@ public class Level {
 
         Creature w = new Wumpus(getRoom("hall"));
         w.setName("Wumpy");
-        w.setCurrentRoom(getRoom("dungeon"));
+        w.setCurrentRoom(getRandomRoom());
         w.getCurrentRoom().addCreature(w);
         allCreaturesInGame.add(w);
 
-        //TODO: make popstar creature
+        Creature p = new Popstar(player.getCurrentRoom());
+        p.setName("Popstar");
+        p.setCurrentRoom(getRandomRoom());
+        p.getCurrentRoom().addCreature(p);
+        allCreaturesInGame.add(p);
     }
 
     public Room getRandomRoom() {
@@ -62,7 +74,7 @@ public class Level {
     }
 
     public void addRoom(String name, String desc) {
-        Room newRoom = new Room(name, desc);
+        Room newRoom = new Room(name);
         rooms.put(name, newRoom);
     }
 
@@ -84,6 +96,10 @@ public class Level {
         return rooms.get(name);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public HashMap<String, Room> getAllRooms() {
         return rooms;
     }
@@ -95,12 +111,12 @@ public class Level {
         private ArrayList<Item> itemsInRoom;
         private ArrayList<Creature> creaturesInRoom;
 
-        private Room(String name, String desc) {
+        private Room(String name) {
             neighbors = new HashMap<>();
             itemsInRoom = new ArrayList<>();
             creaturesInRoom = new ArrayList<>();
             this.name = name;
-            this.desc = desc;
+//            this.desc = desc;
         }
 
         public String getName() {
@@ -112,8 +128,8 @@ public class Level {
             rooms.put(n.getName(), n);
         }
 
-        public void addNeighbor(String current, String name, String desc) {
-            Room newRoom = new Room(name, desc);
+        public void addNeighbor(String current, String name) {
+            Room newRoom = new Room(name);
             rooms.put(name, newRoom);
             neighbors.put(name, newRoom);
             addUndirectedEdge(current, name);
